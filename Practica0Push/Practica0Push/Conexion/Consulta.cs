@@ -14,10 +14,10 @@ namespace Practica0Push.Conexion
 
         static string SELECT_ENCABEZADO = @"SELECT Tipo_Registro, RNC, Periodo_Nomina FROM Encabezados WHERE Periodo_Nomina = @periodoNomina;";
         static string SELECT_DETALLE = @"SELECT d.Tipo_Registro, d.Cedula, d.Sueldo_Bruto, d.Numero_TSS FROM Detalles AS d INNER JOIN EncabezadoDetalle AS ed ON ed.DetalleId = d.Id INNER JOIN Encabezados AS e  ON e.Id = ed.EncabezadoId WHERE e.Periodo_Nomina = @periodoNomina;";
-        static string SELECT_SUMARIO = @"SELECT  COUNT(d.Id) AS Total_Empleados, SUM(d.Sueldo_Bruto) AS Total_Nomina FROM Detalles AS d INNER JOIN EncabezadoDetalle AS ed ON ed.DetalleId = d.Id INNER JOIN Encabezados        AS e  ON e.Id = ed.EncabezadoId WHERE e.Periodo_Nomina = '02/12/2012';";
+        static string SELECT_SUMARIO = @"SELECT COUNT(d.Id), SUM(d.Sueldo_Bruto) FROM Detalles AS d INNER JOIN EncabezadoDetalle AS ed ON ed.DetalleId = d.Id INNER JOIN Encabezados AS e  ON e.Id = ed.EncabezadoId WHERE e.Periodo_Nomina = @periodoNomina;";
 
 
-        public static List<string> GetEncabezado(string strPeriodoNomina)
+        public List<string> GetEncabezado(string strPeriodoNomina)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(SELECT_ENCABEZADO, conn);
@@ -57,7 +57,7 @@ namespace Practica0Push.Conexion
 
 
 
-        public static List<string> GetDetalle(string strPeriodoNomina)
+        public List<string> GetDetalle(string strPeriodoNomina)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(SELECT_DETALLE, conn);
@@ -74,7 +74,7 @@ namespace Practica0Push.Conexion
                 {
                     string Tipo_Registro = dataReader.GetString(0);
                     string Cedula = dataReader.GetString(1);
-                    int Sueldo_Bruto = dataReader.GetInt32(2);
+                    Int64 Sueldo_Bruto = dataReader.GetInt64(2);
                     string Numero_TSS = dataReader.GetString(3);
 
                     //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
@@ -99,7 +99,7 @@ namespace Practica0Push.Conexion
 
 
 
-        public static List<string> GetSumario(string strPeriodoNomina)
+        public List<string> GetSumario(string strPeriodoNomina)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(SELECT_SUMARIO, conn);
@@ -115,10 +115,9 @@ namespace Practica0Push.Conexion
                 while (dataReader.Read())
                 {
 
-                    int Total_Empleados = dataReader.GetInt32(0);
-                    int Monto_Total = dataReader.GetInt32(1);
+                    Int32 Total_Empleados = dataReader.GetInt32(0);
+                    Int64 Monto_Total = dataReader.GetInt64(1);
 
-                    //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
                     sumarioList.Add("S," + Total_Empleados + "," + Monto_Total);
                 }
             }
@@ -135,6 +134,22 @@ namespace Practica0Push.Conexion
 
 
             return sumarioList;
+        }
+
+        static void Main(string[] args)
+        {
+            Consulta consulta = new Consulta();
+            Console.WriteLine("Periodo de nomina: ");
+            string strPeriodoNomina = Console.ReadLine();
+
+            List<string> encabezado = consulta.GetSumario(strPeriodoNomina);
+
+            for (int i = 0; i < encabezado.Count; i++)
+            {
+                Console.WriteLine(encabezado[i]);
+            }
+
+            Console.ReadLine();
         }
 
 

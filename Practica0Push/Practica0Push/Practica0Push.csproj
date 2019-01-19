@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\EscribirLayout.cs" />
     <Compile Include="Archivo\ManejandoArchivo.cs" />
     <Compile Include="Conexion\ConnectionDB.cs" />
     <Compile Include="Conexion\Consulta.cs" />
@@ -51,8 +52,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Application\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
