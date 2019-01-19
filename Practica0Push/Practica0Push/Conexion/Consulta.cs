@@ -136,22 +136,21 @@ namespace Practica0Push.Conexion
             return sumarioList;
         }
 
-        static void Main(string[] args)
-        {
-            Consulta consulta = new Consulta();
-            Console.WriteLine("Periodo de nomina: ");
-            string strPeriodoNomina = Console.ReadLine();
+        //static void Main(string[] args)
+        //{
+        //    Consulta consulta = new Consulta();
+        //    Console.WriteLine("Periodo de nomina: ");
+        //    string strPeriodoNomina = Console.ReadLine();
 
-            List<string> encabezado = consulta.GetSumario(strPeriodoNomina);
+        //    List<string> encabezado = consulta.GetSumario(strPeriodoNomina);
 
-            for (int i = 0; i < encabezado.Count; i++)
-            {
-                Console.WriteLine(encabezado[i]);
-            }
+        //    for (int i = 0; i < encabezado.Count; i++)
+        //    {
+        //        Console.WriteLine(encabezado[i]);
+        //    }
 
-            Console.ReadLine();
-        }
-
+        //    Console.ReadLine();
+        //}
 
     }
 }
