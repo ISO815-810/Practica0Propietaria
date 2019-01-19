@@ -9,11 +9,12 @@ namespace Practica0Push.Conexion
 {
     class ConnectionDB
     {
-
-        SqlConnection conn = new SqlConnection("Data Source=DELL-PC\MSSQLSERVER2016;Initial Catalog=FerreteriaAmericana;Integrated Security=True");
+        static string connectionString = @"Data Source=DELL-PC\MSSQLSERVER2016;Initial Catalog=FerreteriaAmericana;Integrated Security=True";
+        static SqlConnection conn = new SqlConnection(connectionString);
         
-        public void EstablecerConexion()
+        public static void EstablecerConexion()
         {
+            
             try
             {
                 conn.Open();
@@ -22,12 +23,15 @@ namespace Practica0Push.Conexion
             {
                 Console.WriteLine(ex.Message);
             }
+             
         }
 
   
         public void CerrarConexion()
         {
             conn.Close();
-        }  
+        }
+
+      
     }
 }
