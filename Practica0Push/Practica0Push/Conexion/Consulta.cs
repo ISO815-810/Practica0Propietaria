@@ -97,5 +97,46 @@ namespace Practica0Push.Conexion
         }
 
 
+
+
+        public static List<string> GetSumario(string strPeriodoNomina)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand command = new SqlCommand(SELECT_SUMARIO, conn);
+            List<string> sumarioList = new List<string>();
+
+            command.Parameters.AddWithValue("@periodoNomina", strPeriodoNomina);
+            conn.Open();
+
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            try
+            {
+                while (dataReader.Read())
+                {
+
+                    int Total_Empleados = dataReader.GetInt32(0);
+                    int Monto_Total = dataReader.GetInt32(1);
+
+                    //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
+                    sumarioList.Add("S," + Total_Empleados + "," + Monto_Total);
+                }
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine("Ha fallado la cosa viejo" + e.StackTrace);
+            }
+            finally
+            {
+                dataReader.Close();
+                conn.Close();
+            }
+
+
+            return sumarioList;
+        }
+
+
     }
 }
