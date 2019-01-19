@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Practica0Push
+namespace Practica0Push.Application
 {
-    class Program
+    class EscribirLayout
     {
-        static void Main(string[] args)
-        {
-
-        }
     }
 }
