@@ -31,6 +31,7 @@ namespace Practica0Pull.Conexion
                 {
                     Console.WriteLine("Archivo Leido....");
                     string[] partes = new string[] { sr.ReadToEnd() };
+
                     foreach (var partess in partes)
                     {
                         Console.WriteLine("aqui estan: " + partess);
@@ -38,6 +39,7 @@ namespace Practica0Pull.Conexion
 
                     while ((cadena = sr.ReadLine()) != null)
                     {
+                        Console.WriteLine("Probandoa ver si entra en el while.....");
                         switch (partes[0])
                         {
                             case "E":
@@ -109,6 +111,7 @@ namespace Practica0Pull.Conexion
                         }
                     }
 
+                    sr.Close();
                     Console.WriteLine("Archivo finalizado...");
                 }
             }
