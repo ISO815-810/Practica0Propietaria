@@ -17,7 +17,7 @@ namespace Practica0Push.Conexion
         static string SELECT_SUMARIO = @"SELECT  COUNT(d.Id) AS Total_Empleados, SUM(d.Sueldo_Bruto) AS Total_Nomina FROM Detalles AS d INNER JOIN EncabezadoDetalle AS ed ON ed.DetalleId = d.Id INNER JOIN Encabezados        AS e  ON e.Id = ed.EncabezadoId WHERE e.Periodo_Nomina = '02/12/2012';";
 
 
-        public static List<string> getEncabezado(string strPeriodoNomina)
+        public static List<string> GetEncabezado(string strPeriodoNomina)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(SELECT_ENCABEZADO, conn);
@@ -34,7 +34,7 @@ namespace Practica0Push.Conexion
                 {
                     string Tipo_Registro = dataReader.GetString(0);
                     string RNC = dataReader.GetString(1);
-                    string Periodo_Nomina = dataReader.GetString(1);
+                    string Periodo_Nomina = dataReader.GetString(2);
                     //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
                     encabezadosList.Add(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
                 }
@@ -52,6 +52,48 @@ namespace Practica0Push.Conexion
 
 
             return encabezadosList;
+        }
+
+
+
+
+        public static List<string> GetDetalle(string strPeriodoNomina)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand command = new SqlCommand(SELECT_DETALLE, conn);
+            List<string> detallesList = new List<string>();
+
+            command.Parameters.AddWithValue("@periodoNomina", strPeriodoNomina);
+            conn.Open();
+
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            try
+            {
+                while (dataReader.Read())
+                {
+                    string Tipo_Registro = dataReader.GetString(0);
+                    string Cedula = dataReader.GetString(1);
+                    int Sueldo_Bruto = dataReader.GetInt32(2);
+                    string Numero_TSS = dataReader.GetString(3);
+
+                    //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
+                    detallesList.Add(Tipo_Registro + "," + Cedula + "," + Sueldo_Bruto + "," + Numero_TSS);
+                }
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine("Ha fallado la cosa viejo" + e.StackTrace);
+            }
+            finally
+            {
+                dataReader.Close();
+                conn.Close();
+            }
+
+
+            return detallesList;
         }
 
 
