@@ -10,6 +10,7 @@ namespace Practica0Push
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
