@@ -15,6 +15,7 @@ namespace Practica0Pull.Application
 
             Console.WriteLine("Ruta: ");
             string ruta = Console.ReadLine();
+
             Console.WriteLine("archivo: ");
             string archivo = Console.ReadLine();
 

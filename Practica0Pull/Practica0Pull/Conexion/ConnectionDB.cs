@@ -29,8 +29,12 @@ namespace Practica0Pull.Conexion
             {   // Open the text file using a stream reader.
                 using (StreamReader sr = new StreamReader(@"" + vRuta + vArchivo + ".txt"))
                 {
-
+                    Console.WriteLine("Archivo Leido....");
                     string[] partes = new string[] { sr.ReadToEnd() };
+                    foreach (var partess in partes)
+                    {
+                        Console.WriteLine("aqui estan: " + partess);
+                    }
 
                     while ((cadena = sr.ReadLine()) != null)
                     {
@@ -63,10 +67,6 @@ namespace Practica0Pull.Conexion
                                 catch (Exception e)
                                 {
                                     Console.WriteLine("Error Aqui viejo >>> " + e.StackTrace);
-                                }
-                                finally
-                                {
-                                    conn.Close();
                                 }
 
                                 break;
@@ -101,10 +101,6 @@ namespace Practica0Pull.Conexion
                                 {
                                     Console.WriteLine("Error Aqui viejo >>> " + e.StackTrace);
                                 }
-                                finally
-                                {
-                                    conn.Close();
-                                }
                                 break;
 
                             default:
@@ -113,7 +109,7 @@ namespace Practica0Pull.Conexion
                         }
                     }
 
-
+                    Console.WriteLine("Archivo finalizado...");
                 }
             }
             catch (Exception e)
