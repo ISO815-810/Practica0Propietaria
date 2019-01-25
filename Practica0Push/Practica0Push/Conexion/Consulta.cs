@@ -35,8 +35,7 @@ namespace Practica0Push.Conexion
                     string Tipo_Registro = dataReader.GetString(0);
                     string RNC = dataReader.GetString(1);
                     string Periodo_Nomina = dataReader.GetString(2);
-                    //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
-                    encabezadosList.Add(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
+                    encabezadosList.Add(Tipo_Registro + "," + RNC + "," + Periodo_Nomina + ",");
                 }
             }
             catch (Exception e)
@@ -78,7 +77,7 @@ namespace Practica0Push.Conexion
                     string Numero_TSS = dataReader.GetString(3);
 
                     //Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
-                    detallesList.Add(Tipo_Registro + "," + Cedula + "," + Sueldo_Bruto + "," + Numero_TSS);
+                    detallesList.Add(Tipo_Registro + "," + Cedula + "," + Sueldo_Bruto + "," + Numero_TSS + ",");
                 }
             }
             catch (Exception e)

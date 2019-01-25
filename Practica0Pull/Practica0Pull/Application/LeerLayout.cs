@@ -1,9 +1,5 @@
 ﻿using Practica0Pull.Conexion;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Practica0Pull.Application
 {
@@ -13,10 +9,10 @@ namespace Practica0Pull.Application
         {
             ConnectionDB connec = new ConnectionDB();
 
-            Console.WriteLine("Ruta: ");
+            Console.WriteLine("Digite la Ruta del archivo: ");
             string ruta = Console.ReadLine();
 
-            Console.WriteLine("archivo: ");
+            Console.WriteLine("Digite el nombre del archivo: ");
             string archivo = Console.ReadLine();
 
             connec.LeerArchivo(ruta, archivo);

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Practica0Pull.Conexion
 {
@@ -13,9 +9,6 @@ namespace Practica0Pull.Conexion
 
         private static string connectionString = @"Data Source=DELL-PC\MSSQLSERVER2016;Initial Catalog=TSS;Integrated Security=True";
 
-        //static string SELECT_NOMINA = @"SELECT * FROM Nomina;";
-        //static string SELECT_DETALLE_NOMINA = @"SELECT * FROM Detalle_Nomina;";
-
         private static string INSERT_NOMINA = @"INSERT INTO Nomina VALUES(@TipoRegistro,@Rnc,@PeriodoNomina);";
         private static string INSERT_DETALLE_NOMINA = @"INSERT INTO Detalle_Nomina VALUES(@TipoRegistro,@Cedula,@Sueldo,@Numero_TSS);";
 
@@ -23,105 +16,90 @@ namespace Practica0Pull.Conexion
         public void LeerArchivo(string vRuta, string vArchivo)
         {
             SqlConnection conn = new SqlConnection(connectionString);
-            string cadena = "a";
+            //   string cadena = "a";
 
             try
             {   // Open the text file using a stream reader.
                 using (StreamReader sr = new StreamReader(@"" + vRuta + vArchivo + ".txt"))
                 {
-                    Console.WriteLine("Archivo Leido....");
-                    string[] partes = new string[] { sr.ReadToEnd() };
+                    Console.WriteLine("Leyendo Archivo...");
+                    string[] partes = sr.ReadToEnd().Split(',');
 
-                    foreach (var partess in partes)
+                    try
                     {
-                        Console.WriteLine("aqui estan: " + partess);
+                        SqlCommand command = new SqlCommand(INSERT_NOMINA, conn);
+
+                        command.Parameters.AddWithValue("@TipoRegistro", partes[0]);
+                        command.Parameters.AddWithValue("@Rnc", partes[1]);
+                        command.Parameters.AddWithValue("@PeriodoNomina", partes[2]);
+                        conn.Open();
+
+                        //Console.WriteLine($"{partes[0]},{partes[1]},{partes[2]}");
+
+                        int result = command.ExecuteNonQuery();
+                        //conn.Close();
+                        //Check Error
+                        if (result < 0)
+                            Console.WriteLine("Error insertando el encabezado en la BD!");
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine("Error en Encabezado >>> \n" + e.StackTrace + "\n");
                     }
 
-                    while ((cadena = sr.ReadLine()) != null)
+
+                    for (int i = 3; i <= partes.Length; i += 4)
                     {
-                        Console.WriteLine("Probandoa ver si entra en el while.....");
-                        switch (partes[0])
+
+                        Console.Write($"{partes[i]},{partes[i + 1]},{partes[i + 2]},{partes[i + 3]}");
+
+                        try
                         {
-                            case "E":
 
-                                partes = cadena.Split(',');
-                                string Tipo_Registro = partes[0];
-                                string RNC = partes[1];
-                                string Periodo_Nomina = partes[2];
+                            SqlCommand command1 = new SqlCommand(INSERT_DETALLE_NOMINA, conn);
+                            command1.Parameters.AddWithValue("@TipoRegistro", partes[i]);
+                            command1.Parameters.AddWithValue("@Cedula", partes[i + 1]);
+                            command1.Parameters.AddWithValue("@Sueldo", Int64.Parse(partes[i + 2]));
+                            command1.Parameters.AddWithValue("@Numero_TSS", partes[i + 3]);
 
-                                Console.WriteLine(Tipo_Registro + "," + RNC + "," + Periodo_Nomina);
+                            //SqlCommand command1 = new SqlCommand(INSERT_DETALLE_NOMINA, conn);
+                            //command1.Parameters.AddWithValue("@TipoRegistro", "D");
+                            //command1.Parameters.AddWithValue("@Cedula", "15995147852");
+                            //command1.Parameters.AddWithValue("@Sueldo", 2);
+                            //command1.Parameters.AddWithValue("@Numero_TSS", "369852147");
 
-                                try
-                                {
 
-                                    SqlCommand command = new SqlCommand(INSERT_NOMINA, conn);
-                                    command.Parameters.AddWithValue("@TipoRegistro", Tipo_Registro);
-                                    command.Parameters.AddWithValue("@Rnc", RNC);
-                                    command.Parameters.AddWithValue("@PeriodoNomina", Periodo_Nomina);
-                                    conn.Open();
+                            int result1 = command1.ExecuteNonQuery();
 
-                                    int result = command.ExecuteNonQuery();
-
-                                    // Check Error
-                                    if (result < 0)
-                                        Console.WriteLine("Error insertando el encabezado en la BD!");
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine("Error Aqui viejo >>> " + e.StackTrace);
-                                }
-
-                                break;
-
-                            case "D":
-
-                                partes = cadena.Split(',');
-                                string TipoRegistro = partes[0];
-                                string Cedula = partes[1];
-                                Int64 Sueldo = Int64.Parse(partes[2]);
-                                string Numero_TSS = partes[3];
-
-                                Console.WriteLine(TipoRegistro + "," + Cedula + "," + Sueldo + "," + Numero_TSS);
-
-                                try
-                                {
-
-                                    SqlCommand command = new SqlCommand(INSERT_DETALLE_NOMINA, conn);
-                                    command.Parameters.AddWithValue("@TipoRegistro", TipoRegistro);
-                                    command.Parameters.AddWithValue("@Cedula", Cedula);
-                                    command.Parameters.AddWithValue("@Sueldo", Sueldo);
-                                    command.Parameters.AddWithValue("@Numero_TSS", Numero_TSS);
-                                    conn.Open();
-
-                                    int result = command.ExecuteNonQuery();
-
-                                    // Check Error
-                                    if (result < 0)
-                                        Console.WriteLine("Error insertando los detalles en la BD!");
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine("Error Aqui viejo >>> " + e.StackTrace);
-                                }
-                                break;
-
-                            default:
-                                Console.WriteLine("Problemas");
-                                break;
+                            conn.Close();
+                            // Check Error
+                            if (result1 < 0)
+                                Console.WriteLine("Error insertando los detalles en la BD!");
                         }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("\nError en Detalle >>> \n" + e.StackTrace + "\n");
+                        }
+
+
                     }
 
                     sr.Close();
-                    Console.WriteLine("Archivo finalizado...");
+
+                    //Console.WriteLine(partes[0].ToString());
+
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("El Archivo no pudo ser leido>>> ");
-                Console.WriteLine(e.Message);
+                Console.WriteLine("");
+            }
+            finally
+            {
+                conn.Close();
             }
         }
-
 
     }
 }
